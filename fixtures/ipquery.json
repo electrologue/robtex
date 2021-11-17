@@ -1,0 +1,40 @@
+{
+  "status": "ok",
+  "city": "Toronto",
+  "country": "Canada",
+  "as": 12041,
+  "asname": "AFILIAS-NST Afilias Limited",
+  "whoisdesc": "Afilias Canada, Corp. (ACC-308)",
+  "routedesc": "REACH (Customer Route)",
+  "bgproute": "199.19.54.0/24",
+  "act": [
+    {
+      "o": "b0.org.afilias-nst.org",
+      "t": 1498717654
+    }
+  ],
+  "acth": [],
+  "pas": [
+    {
+      "o": "b0.org.afilias-nst.org",
+      "t": 1501358830
+    },
+    {
+      "o": "b0.nic.ngo",
+      "t": 1501358850
+    },
+    {
+      "o": "b0.org.afilias-nst.info",
+      "t": 1493870770
+    },
+    {
+      "o": "b0.nic.ong",
+      "t": 1500758606
+    },
+    {
+      "o": "b0.org.afilias-nst.org",
+      "t": 1452591322
+    }
+  ],
+  "pash": []
+}
