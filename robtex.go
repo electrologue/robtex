@@ -9,7 +9,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"path"
 	"time"
 )
 
@@ -45,7 +44,9 @@ func New(apiKey string) *Client {
 // Most keys are self-explanatory.
 // ex: https://freeapi.robtex.com/ipquery/199.19.54.1
 func (c Client) IPQuery(ctx context.Context, ip string) (*IPQueryResponse, error) {
-	req, err := c.newRequest(ctx, "ipquery", ip)
+	endpoint := c.baseURL.JoinPath("ipquery", ip)
+
+	req, err := c.newRequest(ctx, endpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +76,9 @@ func (c Client) IPQuery(ctx context.Context, ip string) (*IPQueryResponse, error
 // Currently, only returns networks actually in global bgp table, but plans are to extend it.
 // ex: https://freeapi.robtex.com/asquery/1234
 func (c Client) ASQuery(ctx context.Context, number string) (*ASQueryResponse, error) {
-	req, err := c.newRequest(ctx, "asquery", number)
+	endpoint := c.baseURL.JoinPath("asquery", number)
+
+	req, err := c.newRequest(ctx, endpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +108,9 @@ func (c Client) ASQuery(ctx context.Context, number string) (*ASQueryResponse, e
 // The format used is Passive DNS - Common Output Format (https://tools.ietf.org/html/draft-dulaunoy-dnsop-passive-dns-cof-03).
 // ex: https://freeapi.robtex.com/pdns/forward/a.iana-servers.net
 func (c Client) PassiveDNSForward(ctx context.Context, domain string) ([]PassiveDNS, error) {
-	req, err := c.newRequest(ctx, "pdns", "forward", domain)
+	endpoint := c.baseURL.JoinPath("pdns", "forward", domain)
+
+	req, err := c.newRequest(ctx, endpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +146,9 @@ func (c Client) PassiveDNSForward(ctx context.Context, domain string) ([]Passive
 // The format used is Passive DNS - Common Output Format (https://tools.ietf.org/html/draft-dulaunoy-dnsop-passive-dns-cof-03).
 // ex: https://freeapi.robtex.com/pdns/reverse/199.43.132.53
 func (c Client) PassiveDNSReverse(ctx context.Context, ip string) ([]PassiveDNS, error) {
-	req, err := c.newRequest(ctx, "pdns", "reverse", ip)
+	endpoint := c.baseURL.JoinPath("pdns", "reverse", ip)
+
+	req, err := c.newRequest(ctx, endpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -173,12 +180,7 @@ func (c Client) PassiveDNSReverse(ctx context.Context, ip string) ([]PassiveDNS,
 	return results, nil
 }
 
-func (c Client) newRequest(ctx context.Context, k ...string) (*http.Request, error) {
-	endpoint, err := c.baseURL.Parse(path.Join(c.baseURL.Path, path.Join(k...)))
-	if err != nil {
-		return nil, err
-	}
-
+func (c Client) newRequest(ctx context.Context, endpoint *url.URL) (*http.Request, error) {
 	if c.apiKey != "" {
 		query := endpoint.Query()
 		query.Set("key", c.apiKey)
